@@ -22,7 +22,7 @@ type result struct {
 }
 
 func rateLimiter() gin.HandlerFunc {
-	limiter := rate.NewLimiter(1, 1) // set rate limit to one request per second
+	limiter := rate.NewLimiter(10, 20) // set rate limit to 10 request per second
 	return func(ctx *gin.Context) {
 		if !limiter.Allow() {
 			message := gin.H{
