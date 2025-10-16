@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"net/http"
 	"time"
 )
@@ -16,7 +17,9 @@ func makeRequest() (*CatFact, int, error) {
 		Timeout: 5 * time.Second, // set 10 second timeout
 	}
 
-	resp, err := client.Get("https://catfact.ninja/fact")
+	url := fmt.Sprintf("https://catfact.ninja/fact?max_length=%d", RandomInt(20, 170))
+
+	resp, err := client.Get(url)
 	if err != nil {
 		return nil, http.StatusInternalServerError, err
 	}
@@ -32,4 +35,8 @@ func makeRequest() (*CatFact, int, error) {
 	}
 
 	return &fact, resp.StatusCode, nil
+}
+
+func RandomInt(min, max int64) int64 {
+	return min + rand.Int63n(max-min+1)
 }
