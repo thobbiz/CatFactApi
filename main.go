@@ -49,8 +49,13 @@ func factHandler(ctx *gin.Context) {
 	status := "success"
 	catfact, statusCode, err := makeRequest()
 	if err != nil || statusCode != http.StatusOK {
-		ctx.JSON(statusCode, err)
-		ctx.Abort()
+		ctx.JSON(statusCode,
+			gin.H{
+				"status":    "unsuccessful",
+				"error":     "Failed to fetch a new cat fact. Please try again later.",
+				"timestamp": time.Now().UTC().Format(time.RFC3339),
+			})
+		return
 	}
 
 	result := result{
